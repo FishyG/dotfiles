@@ -78,3 +78,8 @@ set tabstop=4
 
 " Add the termdebug package for ez debugging with GDB
 packadd termdebug
+
+" Set the fold parameter
+set foldmethod=syntax
+set foldmethod=indent
+set foldlevel=1
