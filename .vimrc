@@ -1,4 +1,4 @@
-" Jessy's VIM config github.com/FishyG/dotfiles/.vimrc
+" Fishy's VIM config github.com/FishyG/dotfiles/.vimrc
 
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -83,3 +83,8 @@ packadd termdebug
 set foldmethod=syntax
 set foldmethod=indent
 set foldlevel=1
+
+" Highlight all when searching
+set hlsearch
+highlight Search ctermbg=Magenta
+
