@@ -250,6 +250,9 @@ include ~/.config/sway/outputs
 # Exec XDG  desktop portal
 #exec --no-startup-id /usr/lib/xdg-desktop-portal -r
 
+# Enable numlock by default
+input type:keyboard xkb_numlock enabled
+
 # Launch polkit authentication agent
 exec --no-startup-id lxpolkit
 
