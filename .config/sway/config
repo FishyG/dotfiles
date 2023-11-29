@@ -23,13 +23,13 @@ set $explorer dolphin
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | wmenu | xargs swaymsg exec --
 set $menu wofi --show drun
-include /etc/sway/config-vars.d/*
+#include /etc/sway/config-vars.d/*
 
 ### Appearance
 
 # SwayFx specific
-gaps inner 3
-gaps outer 5
+gaps inner 2
+gaps outer 3
 
 ## swayfx specific
 # # window corner radius in px
@@ -222,13 +222,17 @@ bar {
 
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
-    status_command while date +'%Y-%m-%d %I:%M:%S %p'; do sleep 1; done
+    status_command while ~/.config/sway/status.sh; do sleep 1; done
+	
+	# Original status_command
+	#status_command while date +'Today is : %Y-%m-%d %I:%M:%S %p'; do sleep 1; done
 
     colors {
         statusline #ffffff
-        background #323232
+        background #003232
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
+	font pango:VictorMono Nerd Font Medium Italic 10
 }
 
 
@@ -251,7 +255,7 @@ include ~/.config/sway/outputs
 #exec --no-startup-id /usr/lib/xdg-desktop-portal -r
 
 # Enable numlock by default
-input type:keyboard xkb_numlock enabled
+input type:keyboard xkb_numlock enabled 
 
 # Launch polkit authentication agent
 exec --no-startup-id lxpolkit
