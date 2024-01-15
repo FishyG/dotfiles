@@ -86,7 +86,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+d exec $menu
     bindsym $mod+space exec $menu
 
-    bindsym $mod+e exec $explorer
+    bindsym $mod+x exec $explorer
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -99,7 +99,7 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'Bye bye? This will end your session.' -B 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
@@ -161,9 +161,9 @@ output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    #bindsym $mod+s layout stacking
+    bindsym $mod+s layout stacking
     bindsym $mod+w layout tabbed
-    #bindsym $mod+e layout toggle split
+    bindsym $mod+e layout toggle split
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
@@ -223,7 +223,7 @@ bar {
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
     status_command while ~/.config/sway/status.sh; do sleep 1; done
-	
+
 	# Original status_command
 	#status_command while date +'Today is : %Y-%m-%d %I:%M:%S %p'; do sleep 1; done
 
@@ -243,6 +243,12 @@ bindsym --locked XF86AudioPlay exec playerctl play-pause
 bindsym --locked XF86AudioNext exec playerctl next
 bindsym --locked XF86AudioPrev exec playerctl previous
 
+# Show the clipboard history
+bindsym $mod+Shift+v exec cliphist list | wofi --dmenu | cliphist decode | wl-copy
+
+# Lock the screen
+bindsym $mod+Shift+Tab exec swaylock --image='/home/jessy/Pictures/wallpapers/water.jpg' --scaling fill --color 000000
+
 # Screenshot
 bindsym $mod+Shift+s exec grim -g "$(slurp -d)" - | wl-copy
 
@@ -257,6 +263,15 @@ include ~/.config/sway/outputs
 # Enable numlock by default
 input type:keyboard xkb_numlock enabled 
 
+# Store text data in cliphist
+exec wl-paste --type text --watch cliphist store
+
+# Store image data in cliphist
+exec wl-paste --type image --watch cliphist store
+
+# Start copyq (not really needed, but cool to have)
+exec copyq --start-server
+
 # Launch polkit authentication agent
 exec --no-startup-id lxpolkit
 
@@ -264,3 +279,12 @@ exec blueman-applet
 
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+# Lock sway after 300 sec then sleep after 600 seconds
+exec swayidle -w \
+	timeout 600 'swaylock -f -c 000000' \
+	timeout 1000 'swaymsg "output * dpms off"' \
+		resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f -c 000000'
+
+
