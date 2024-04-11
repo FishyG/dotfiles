@@ -21,8 +21,8 @@ set $explorer dolphin
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-#set $menu dmenu_path | wmenu | xargs swaymsg exec --
-set $menu wofi --show drun
+set $menu wofi --show drun | xargs swaymsg exec --
+#set $menu wofi --show drun
 #include /etc/sway/config-vars.d/*
 
 ### Appearance
