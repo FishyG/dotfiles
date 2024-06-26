@@ -1,0 +1,3 @@
+output "DP-1" background /home/jessy/Pictures/plutoDP-1.jpg fill
+output "HDMI-A-2" background /home/jessy/Pictures/plutoHDMI-A-2.jpg fill
+output "DVI-D-1" background /home/jessy/Pictures/plutoDVI-D-1.jpg fill

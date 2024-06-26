@@ -319,6 +319,8 @@ include /etc/sway/config.d/*
 
 # Load the config for the displays
 include ~/.config/sway/outputs
+include ~/.config/sway/wallpapers
+include ~/.config/sway/workspaces
 
 # Enable numlock by default
 input type:keyboard xkb_numlock enabled 
