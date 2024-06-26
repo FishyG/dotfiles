@@ -1,7 +1,7 @@
 local M = {
     "nvim-telescope/telescope.nvim",
     lazy = false,
-    dependencies = { { "nvim-lua/plenary.nvim" } },
+    dependencies = { { "nvim-lua/plenary.nvim" }, {"xiyaowong/telescope-emoji.nvim"} },
     config = function()
         require('telescope').setup({
             defaults = {

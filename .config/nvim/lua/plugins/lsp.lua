@@ -72,7 +72,10 @@ local M = {
         require('mason').setup({})
         require('mason-lspconfig').setup({
             ensure_installed = {
-                "rust_analyzer",
+                "rust_analyzer",    -- For rust (William bruh)
+                "clangd",   -- For clangd
+                "bashls",   -- For bash
+                "pyright"  -- For python
             },
             handlers = {
                 lsp.default_setup,

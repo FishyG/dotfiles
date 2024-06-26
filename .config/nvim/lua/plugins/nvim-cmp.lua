@@ -53,7 +53,7 @@ local M = {
             },
         })
         
-        -- <Tab> to switch to the next thingy with luasnip
+        -- TODO : Fix me some day, just so I can <Tab> instead of <Alt-Tab>
         vim.keymap.set({"i", "s"}, "<Tab>",
         function()
             if luasnip.expand_or_jumpable() then

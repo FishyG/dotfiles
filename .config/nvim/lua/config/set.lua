@@ -32,3 +32,15 @@ vim.g.mapleader = " "
 
 -- Disable the thingy that say shit like "-- INSERT --" or wtv
 vim.opt.showmode = false
+
+-- Set the clipboard to the system's clipboard
+--vim.opt.clipboard = "unnamedplus"
+vim.keymap.set("v", "<leader>y", "\"+y")
+
+-- I'm trying to do this :
+--imap <silent> <C-C> <C-R>=string(eval(input("Calculate: ")))<CR>
+--
+--
+--But these are shit and don't work
+--vim.api.nvim_set_keymap('i', '<C-C>', function() vim.cmd(string(eval(input("Calculate: ")))<CR>) end, { silent = true })
+--vim.api.nvim_set_keymap('i', '<C-C>', '<Cmd>string(eval(input("Calculate: ")))<CR>', { silent = true })
