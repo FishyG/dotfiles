@@ -309,6 +309,9 @@ bar {
     # Screenshot
     bindsym $mod+Shift+s exec grim -g "$(slurp -d)" - | wl-copy
 
+    # Make a screen recording
+    bindsym $mod+Shift+g exec pkill --euid "$USER" --signal SIGINT wf-recorder || bash -c 'wf-recorder -g "$(slurp)" -F fps=15 -f pipe:99 -m GIF -c gif 99>&1 >&2 | gifsicle -O3 --lossy=100 -o /tmp/yoink.gif && notify-send -t 10000 "Recording completed" && wl-copy -t image/png < /tmp/yoink.gif'
+
     # To mess with the opacity of the current window
     bindsym $mod+Shift+o exec swaymsg opacity plus 0.1
     bindsym $mod+o exec swaymsg opacity minus 0.1
@@ -323,15 +326,27 @@ include ~/.config/sway/wallpapers
 include ~/.config/sway/workspaces
 
 # Enable numlock by default
-input type:keyboard xkb_numlock enabled 
+input type:keyboard {
+    xkb_numlock enabled
+    xkb_layout us,ca
+    xkb_options grp:alt_caps_toggle
+}
+# Send notification when switching keyboard layout
+exec ~/.config/sway/layout_notify.sh
 
 # Auto start some applications
 
+    # exec --no-startup-id thunderbird
     exec --no-startup-id firefox
-    #exec --no-startup-id thunderbird
 
     # exec xdg  desktop portal
     #exec --no-startup-id /usr/lib/xdg-desktop-portal -r
+
+    # store text data in cliphist
+    exec wl-paste --type text --watch cliphist store
+
+    # store image data in cliphist
+    exec wl-paste --type image --watch cliphist store
 
     # start copyq (not really needed, but cool to have)
     exec copyq --start-server
@@ -356,5 +371,3 @@ input type:keyboard xkb_numlock enabled
     #	timeout 1000 'swaymsg "output * dpms off"' \
     #		resume 'swaymsg "output * dpms on"' \
     #	before-sleep 'swaylock -f -c 000000'
-
-
