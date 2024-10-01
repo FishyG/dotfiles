@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Get the cpu usage
-cpu_usage=$(top -bn1 | grep "Cpu(s)" | \
-            sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | \
-            awk '{print 100 - $1}')
+cpu_usage=$(top -bn1 | grep "Cpu(s)" |
+    sed "s/.*, *\([0-9.]*\)%* id.*/\1/" |
+    awk '{print 100 - $1}')
 
 cpu_color="'#$(printf '%02x' $(expr ${cpu_usage%.*} \* 5 / 2))$(printf '%02x' $(expr 250 - ${cpu_usage%.*} \* 5 / 2))00'"
 printf -v cpu_usage "CPU:<span foreground=$cpu_color>%5s%%</span>" "$cpu_usage"
@@ -22,40 +22,44 @@ linux_version="$(uname -s):<span foreground='#ee44ff'> $(uname -r | cut -d '-' -
 
 keyboard_layout=$(swaymsg -t get_inputs | jq '.[0].xkb_active_layout_name')
 
-keyboard_layout="Keybord:<span foreground='#ee44ff'> ${keyboard_layout//\"}</span>"
-# keyboard_layout="Keybord: $keyboard_layout"
+keyboard_layout="Keybord:<span foreground='#ee44ff'> ${keyboard_layout//\"/}</span>"
 
 # sound_volume=$(amixer get Master | grep -o '\[[0-9]*%\]' | grep -o '[0-9]*' | sed -n '2p')
 # printf -v sound_volume "Volume : %d%%" "$sound_volume"
-#
-# now_playing="$(playerctl metadata title 2> /dev/null) - $(playerctl metadata artist 2> /dev/null)"
-# 
-# if [[ "$now_playing" == "$(cat /tmp/temp_nowplaying)" ]]
-# then
-# 	if [[ "$(playerctl status 2> /dev/null)" == "Playing" ]]
-# 	then
-# 		now_playing=$(cat /tmp/temp_nowplaying_rotate)
-# 		new_now_playing="${now_playing:1}${now_playing:0:1}"
-# 		echo "$new_now_playing" > /tmp/temp_nowplaying_rotate
-# 	else
-# 		now_playing=$(cat /tmp/temp_nowplaying)
-# 		echo "$now_playing " > /tmp/temp_nowplaying_rotate
-# 	fi
-# else
-# 	echo $now_playing > /tmp/temp_nowplaying
-# 	if [ "${#now_playing}" -lt 20 ]
-# 	then
-# 			printf -v now_playing "%-19s" "$now_playing"
-# 	fi
-# 	echo "$now_playing " > /tmp/temp_nowplaying_rotate
-# fi
-# 
-# printf -v now_playing '%.20s' "$now_playing"
-# printf -v now_playing "Now Playing : %20s" "$now_playing"
 
-#echo "$now_playing | $sound_volume | $ram_usage | $cpu_usage | $linux_version | $date_formatted "
-#
-# echo "$ram_usage | $cpu_usage | $linux_version | $date_formatted <span font='VictorMono Nerd Font medium Italic 10'><span foreground='#ff0000ff'>$linux_version</span>test</span>"
+NOW_PLAYING_TITLE=$(playerctl metadata title 2>/dev/null | sed 's/&/\&amp;/g')
+NOW_PLAYING_ARTIST=$(playerctl metadata artist 2>/dev/null | sed 's/&/\&amp;/g')
+NOW_PLAYING="$NOW_PLAYING_TITLE - $NOW_PLAYING_ARTIST"
+PREVIOUS_NOW_PLAYING=$(cat /tmp/temp_nowplaying 2>/dev/null)
 
-echo "<span font='VictorMono Nerd Font medium Italic 10'>$ram_usage | $cpu_usage | $keyboard_layout | $linux_version | $date_formatted </span>"
+# Player status
+PLAYER_STATUS=$(playerctl status 2>/dev/null)
 
+# Rotate the song if it's still the same
+if [[ "$NOW_PLAYING" == "$PREVIOUS_NOW_PLAYING" ]]; then
+    if [[ "$PLAYER_STATUS" == "Playing" ]]; then
+        NOW_PLAYING=$(cat /tmp/temp_nowplaying_rotate)
+        NEW_NOW_PLAYING="${NOW_PLAYING:1}${NOW_PLAYING:0:1}"
+        echo "$NEW_NOW_PLAYING" >/tmp/temp_nowplaying_rotate
+    else
+        NOW_PLAYING="$PREVIOUS_NOW_PLAYING"
+        echo "$NOW_PLAYING " >/tmp/temp_nowplaying_rotate
+    fi
+else
+    echo $NOW_PLAYING > /tmp/temp_nowplaying
+    if [ "${#NOW_PLAYING}" -lt 20 ]; then
+        printf -v NOW_PLAYING "%-19s" "$NOW_PLAYING"
+    fi
+    echo "$NOW_PLAYING " >/tmp/temp_nowplaying_rotate
+fi
+
+# Display now playing only if title is available
+if [[ -n $NOW_PLAYING_TITLE ]]; then
+    printf -v NOW_PLAYING '%.20s' "$NOW_PLAYING"
+    printf -v NOW_PLAYING "Now Playing :<span foreground='#ee44ff'> %20s </span>| " "$NOW_PLAYING"
+else
+    # Clear now playing (show nothing)
+    NOW_PLAYING=""
+fi
+
+echo "<span font='VictorMono Nerd Font medium Italic 10'>${NOW_PLAYING}$ram_usage | $cpu_usage | $keyboard_layout | $linux_version | $date_formatted </span>"
