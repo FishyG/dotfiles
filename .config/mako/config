@@ -1,6 +1,8 @@
 # If application doesn't set a timeout set it to 10 sec by default
 default-timeout=10000
 
+icon-path=/usr/share/icons/breeze-dark
+
 font=VictorMono NF SemiBold Italic 10
 
 # Styling
@@ -8,6 +10,8 @@ font=VictorMono NF SemiBold Italic 10
     border-color=#ff00ffdd
     background-color=#330033ee
     text-color=#ffffffff
+    progress-color=over #ee22cc55
+
     # Misc
     border-radius=5
 
