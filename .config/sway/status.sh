@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Set locale to UTF-8
+export LANG=en_CA.UTF-8
+export LC_ALL=en_CA.UTF-8
+
 # Get the cpu usage
 cpu_usage=$(top -bn1 | grep "Cpu(s)" |
     sed "s/.*, *\([0-9.]*\)%* id.*/\1/" |
@@ -40,15 +44,15 @@ if [[ "$NOW_PLAYING" == "$PREVIOUS_NOW_PLAYING" ]]; then
     if [[ "$PLAYER_STATUS" == "Playing" ]]; then
         NOW_PLAYING=$(cat /tmp/temp_nowplaying_rotate)
         NEW_NOW_PLAYING="${NOW_PLAYING:1}${NOW_PLAYING:0:1}"
-        echo "$NEW_NOW_PLAYING" >/tmp/temp_nowplaying_rotate
+        echo -e "$NEW_NOW_PLAYING" >/tmp/temp_nowplaying_rotate
     else
         NOW_PLAYING="$PREVIOUS_NOW_PLAYING"
-        echo "$NOW_PLAYING " >/tmp/temp_nowplaying_rotate
+        echo -e "$NOW_PLAYING" >/tmp/temp_nowplaying_rotate
     fi
 else
     echo $NOW_PLAYING > /tmp/temp_nowplaying
     if [ "${#NOW_PLAYING}" -lt 20 ]; then
-        printf -v NOW_PLAYING "%-19s" "$NOW_PLAYING"
+        printf -v NOW_PLAYING "%-19s \u200B" "$NOW_PLAYING"
     fi
     echo "$NOW_PLAYING " >/tmp/temp_nowplaying_rotate
 fi
@@ -62,4 +66,4 @@ else
     NOW_PLAYING=""
 fi
 
-echo "<span font='VictorMono Nerd Font medium Italic 10'>${NOW_PLAYING}$ram_usage | $cpu_usage | $keyboard_layout | $linux_version | $date_formatted </span>"
+echo -e "<span font='VictorMono Nerd Font medium Italic 10'>${NOW_PLAYING}\u200B$ram_usage | $cpu_usage | $keyboard_layout | $linux_version | $date_formatted </span>"
