@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Launch scrcpy with the device specified by autoadb
-scrcpy -s "$1" --turn-screen-off &
+scrcpy -s "$1" --turn-screen-off --stay-awake --no-audio &
 
 # Wait for scrcpy to potentially initialize and update the sway tree
 sleep 2
