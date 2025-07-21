@@ -26,7 +26,7 @@ linux_version="$(uname -s):<span foreground='#ee44ff'> $(uname -r | cut -d '-' -
 
 keyboard_layout=$(swaymsg -t get_inputs | jq '.[0].xkb_active_layout_name')
 
-keyboard_layout="Keybord:<span foreground='#ee44ff'> ${keyboard_layout//\"/}</span>"
+keyboard_layout="Keyboard:<span foreground='#ee44ff'> ${keyboard_layout//\"/}</span>"
 
 # sound_volume=$(amixer get Master | grep -o '\[[0-9]*%\]' | grep -o '[0-9]*' | sed -n '2p')
 # printf -v sound_volume "Volume : %d%%" "$sound_volume"
