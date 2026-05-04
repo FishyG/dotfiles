@@ -33,24 +33,11 @@ local M = {
         function on_attach(_, bufnr)
             local opts = { buffer = bufnr, remap = false }
 
-            vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-                vim.lsp.handlers.hover,
-                {
-                    border = border,
-                }
-            )
-            vim.lsp.handlers["textDocument/signature_help"] = vim.lsp.with(
-                vim.lsp.handlers.signature_help,
-                {
-                    border = border,
-                }
-            )
-
             keymap.set("n", "gd", function()
                 vim.lsp.buf.definition()
             end, opts)
             keymap.set("n", "K", function()
-                vim.lsp.buf.hover()
+                vim.lsp.buf.hover() { border = border }
             end, opts)
             keymap.set("n", "<leader>vd", function()
                 vim.diagnostic.open_float()
@@ -62,7 +49,7 @@ local M = {
                 vim.lsp.buf.references()
             end, opts)
             keymap.set("i", "<C-h>", function()
-                vim.lsp.buf.signature_help()
+                vim.lsp.buf.signature_help()  { border = border }
             end, opts)
             keymap.set("n", "<C-F>", "<cmd>LspZeroFormat<CR>")
         end
